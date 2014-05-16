@@ -2,9 +2,13 @@ package com.gpsapp.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -35,6 +39,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     private static final String PREF_NAME = "name";
     SharedPreferences mSharedPreferences;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +57,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         mainButton = (Button) findViewById(R.id.main_button);
         mainButton.setOnClickListener(this);
 
+        /* NOT NEEDED RIGHT NOW
         // 3. Access the EditText defined in layout XML
         mainEditText = (EditText) findViewById(R.id.main_edittext);
 
@@ -69,6 +77,34 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
         // 7. Greet the user, or ask for their name if new
         displayWelcome();
+        */
+
+        //GPS TEST
+        LocationManager manager =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        LocationListener listener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                mainTextView.setText("Longitude is "+location.getLatitude()+  "\n and Latitude is "+ location.getLongitude());
+
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
     }
 
 
@@ -123,6 +159,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         mNameList.add(mainEditText.getText().toString());
         mArrayAdapter.notifyDataSetChanged();
 
+
         // 6. The text you'd like to share has changed,
         // and you need to update
         setShareIntent();
@@ -135,6 +172,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         Log.d("omg android", position + ": " + mNameList.get(position));
     }
 
+    /*
     public void displayWelcome() {
 
         // Access the device's key-value storage
@@ -189,4 +227,5 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             alert.show();
         }
     }
+    */
 }
